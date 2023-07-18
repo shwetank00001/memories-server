@@ -3,6 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 require('./db/connect')
 
+const posts = require('./routes/posts')
 
 const app = express()
 
@@ -16,6 +17,8 @@ app.use(cors())
 app.get('/', (req,res)=>{
     res.send("Hi")
 })
+
+app.use('/posts', posts)
 
 
 app.listen(5000, () => {
