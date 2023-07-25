@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose')
 const PostMessage = require('../models/postMessage')
 
 async function getPosts(req,res){
@@ -12,19 +13,31 @@ async function getPosts(req,res){
 async function createPost(req,res){
     const post = req.body
     const newPost = new PostMessage(post)
-
     try {
-        // const create = await PostMessage.create(post)
-        // res.status(200).json(create)
-        await newPost.save()
-        res.status(200).json(newPost)
-    } catch (error) {
+        // await newPost.save()
+        // res.status(200).json(newPost)
+
+        const createdPost = await PostMessage.create(req.body)
+        res.send(createdPost).status(201)
+    } catch (error) {   
         res.status(400).json({msg:error})
     }
 }
 
+async function updatePost(req,res){
+    const { id: _id } = req.params     // We always take id from req.params  ,, we destructure it since we want to assign _id (the mongo sv id) to id (the one we are giving a var to.)
+    const post = req.body
+
+    if(!mongoose.Types.ObjectId.isValid(_id)){
+        return res.status(404).send("Not Found !")
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true } )
+    res.json(updatedPost)
+}
 
 module.exports = {
     getPosts,
-    createPost
+    createPost,
+    updatePost
 }
