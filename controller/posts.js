@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+const  mongoose  = require('mongoose')
 const PostMessage = require('../models/postMessage')
 
 async function getPosts(req,res){
