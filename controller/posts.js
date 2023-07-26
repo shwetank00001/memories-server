@@ -36,8 +36,22 @@ async function updatePost(req,res){
     res.json(updatedPost)
 }
 
+async function deletePost(req,res){
+    try {
+        const { id : postID } = req.params
+        const deleteItem = await PostMessage.findByIdAndDelete({ _id: postID })
+        if(!deleteItem){
+            res.send("Item Not Present")
+        }
+        res.json(deleteItem)
+    } catch (error) {
+        console.log("Item not present")
+    }
+}
+
 module.exports = {
     getPosts,
     createPost,
-    updatePost
+    updatePost,
+    deletePost
 }
