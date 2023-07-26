@@ -48,9 +48,21 @@ async function deletePost(req,res){
     }
 }
 
+async function likePost(req,res){
+    try {
+        const { id } = req.params
+        const post = await PostMessage.findById(id)
+        const updatedPost = await PostMessage.findByIdAndUpdate( id , { likeCount: post.likeCount + 1}, {new: true})
+        res.json(updatedPost)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     getPosts,
     createPost,
     updatePost,
-    deletePost
+    deletePost,
+    likePost
 }
