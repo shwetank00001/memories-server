@@ -20,15 +20,19 @@ async function createPost(req,res){
 }
 
 async function updatePost(req,res){
-    const { id: _id } = req.params     // We always take id from req.params  ,, we destructure it since we want to assign _id (the mongo sv id) to id (the one we are giving a var to.)
-    const post = req.body
+         // We always take id from req.params  ,, we destructure it since we want to assign _id (the mongo sv id) to id (the one we are giving a var to.)
 
-    if(!mongoose.Types.ObjectId.isValid(_id)){
-        return res.status(404).send("Not Found !")
+    try {
+        const { id: postID } = req.params
+        const updatedPost = await PostMessage.findByIdAndUpdate({ _id: postID })
+
+        if(!updatedPost){
+            res.send("No post with id", id)
+        }
+        res.send(updatedPost)
+    } catch (error) {
+        console.log("None found with the id")
     }
-
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true } )
-    res.json(updatedPost)
 }
 
 async function deletePost(req,res){
