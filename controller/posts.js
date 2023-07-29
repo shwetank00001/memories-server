@@ -10,6 +10,7 @@ async function getPosts(req,res){
     }
 }
 
+
 async function createPost(req,res){
     try {
         const createdPost = await PostMessage.create(req.body)
@@ -19,21 +20,38 @@ async function createPost(req,res){
     }
 }
 
-async function updatePost(req,res){
-         // We always take id from req.params  ,, we destructure it since we want to assign _id (the mongo sv id) to id (the one we are giving a var to.)
 
-    try {
-        const { id: postID } = req.params
-        const updatedPost = await PostMessage.findByIdAndUpdate({ _id: postID })
+async function updatePost(req, res){
+    const { id } = req.params;
+    const { title, message, creator, selectedFile, tags } = req.body;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-        if(!updatedPost){
-            res.send("No post with id", id)
-        }
-        res.send(updatedPost)
-    } catch (error) {
-        console.log("None found with the id")
-    }
+    const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+
+    await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
+
+    res.json(updatedPost);
 }
+
+const ghasf = () => {
+
+}
+// async function updatePost(req,res){
+//          // We always take id from req.params  ,, we destructure it since we want to assign _id (the mongo sv id) to id (the one we are giving a var to.)
+
+//     try {
+//         const { id: postID } = req.params
+//         const updatedPost = await PostMessage.findByIdAndUpdate({ _id: postID })
+
+//         if(!updatedPost){
+//             res.send("No post with id", id)
+//         }
+//         res.send(updatedPost)
+//     } catch (error) {
+//         console.log("None found with the id")
+//     }
+// }
 
 async function deletePost(req,res){
     try {
