@@ -6,6 +6,7 @@ require('./db/connect')
 const posts = require('./routes/posts')
 
 const app = express()
+const PORT = process.env.PORT || 5000
 
 
 // body-parser extracts the entire body portion of an incoming request stream and exposes it on req. body . The middleware was a part of Express. js earlier but now you have to install it separately. This body-parser module parses the JSON, buffer, string and URL encoded data submitted using HTTP POST request.
@@ -21,7 +22,7 @@ app.get('/', (req,res)=>{
 app.use('/posts', posts)
 
 
-app.listen(5000, () => {
-    console.log("SERVER ON PORT 5000")
+app.listen(PORT, () => {
+    console.log(`SERVER ON PORT ${PORT}`)
 })
 
